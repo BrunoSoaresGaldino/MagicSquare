@@ -1,8 +1,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <conio.h>
 #include <time.h>
+#include <stdbool.h>
+
 #define KEY_LEFT 75
 #define KEY_RIGHT 77
 #define KEY_UP 72
@@ -11,41 +12,41 @@
 #define KEY_ENTER 13
 #define KEY_SPACE 32
 
-#define TRUE 1
-#define FALSE 0
-#define TAB_X 50
-#define TAB_Y 10
-
-void DisplayMatrix(int *matrix);
-void Presentation(void);
-void Play();
-int PlaAgain(void);
-void Input(int *matrix);
-void ClearScreen(void);
 void MoveCursorTo(int x,int y);
-void Help(void);
+void ClearScreen(void);
+int getch(void);
 void Credits(void);
 void Solution(void);
 int Exit(void);
+int PlaAgain(void);
+void Input(int *matrix);
+void DisplayMatrix(int *matrix);
+int CheckWin(int *matrix, int _sum);
+void Play();
 void ClearMatrix(int *matrix);
+void Help(void);
 void Menu();
 void Congratulations(void);
-int CheckWin(int *matrix, int _sum);
+void Presentation(void);
 
 int main(void)
 {
     
-    srand(time(NULL));
+    srand((unsigned)time(NULL));
     Presentation();
-    
+   
     Menu();
     
     return 0;
 } 
 
+// Essas funcoes de limpeza de tela,
+//mover cursor e a implementação
+// de getch para linux são de autoria de Frederico Pissarra.
 #if defined(_WIN32)
 
 #include <windows.h>
+#include <conio.h>
 
 void MoveCursorTo(int x,int y)
 {
@@ -65,17 +66,39 @@ void ClearScreen()
     FillConsoleOutputAttribute(hConsole, csbi.wAttributes, dwConsoleSize, coord, &dwWriten);
     SetConsoleCursorPosition(hConsole, coord);
 }
-#elif defined (__linux) || (__APPLE__) 
+
+#elif defined (__linux)
+
+#include <termios.h>
+#include <unistd.h>
 
 void MoveCursorTo(int x, int y)
 {
-    
+    printf("\x1b[%d;%dH", ++x, ++y);
 }
 
 void ClearScreen()
 {
     fputs("\x1b[2J",stdout);
 }
+
+int gecth()
+{
+    struct termios oldt, newt;
+    int ch;
+ 
+    tcgetattr(STDIN_FILENO, &oldt);
+    newt = oldt;
+    newt.c_lflag &= ~(ICANON | ECHO);
+    tcsetattr(STDIN_FILENO, TCSANOW, &newt);
+ 
+    ch = getchar();
+  
+    tcsetattr(STDIN_FILENO, TCSANOW, &oldt);
+        
+    return ch;
+}
+
 #else 
     
     fputs("Sistema operacional nao suportado",stderr);
@@ -126,9 +149,9 @@ int Exit(void)
     puts("\r                                                                          ");
     
     if(!position)
-        return TRUE;
+        return true;
     
-    return FALSE;
+    return false;
 }
 
 int PlaAgain(void)
@@ -148,8 +171,8 @@ int PlaAgain(void)
     while(key_pressed != KEY_ENTER);
     puts("\r                                                                          ");
     
-    if(position) return FALSE;
-        else return TRUE;
+    if(position) return false;
+        else return true;
 }
 
 void Input(int *matrix)
@@ -234,7 +257,7 @@ int CheckWin(int *matrix,int _sum)
         sum = ( *(matrix + i*3 ) + *(matrix + i*3 + 1)+ *(matrix + i*3 + 2));
 
         if(sum != _sum)
-            return FALSE;
+            return false;
     }
     
     for(i = 0 ; i < 3 ; i++ )//VERIFICA AS SOMAS DAS COLUNAS
@@ -242,16 +265,16 @@ int CheckWin(int *matrix,int _sum)
         sum = ( *(matrix + i) + *(matrix + i + 3) + *(matrix + i +6 ) );
         
         if(sum != _sum)
-            return FALSE;
+            return false;
     }
     
     if( ( *(matrix) + *(matrix + 4) + *(matrix + 8) )!= _sum)
-        return FALSE;
+        return false;
     
      if( ( *(matrix+2) + *(matrix + 4) + *(matrix + 6) )!= _sum)
-        return FALSE;
+        return false;
     
-    return TRUE;
+    return true;
 }
 
 void Play( )
@@ -260,7 +283,7 @@ void Play( )
     int matrix[3][3];
     ClearMatrix((int*)matrix);
     
-    while(TRUE)
+    while(true)
     {   
         ClearScreen();
         printf("A soma eh %d",_sum);
@@ -268,7 +291,7 @@ void Play( )
         Input((int*)matrix);
         DisplayMatrix((int*)matrix);
 		
-        if( CheckWin((int*)matrix,_sum) == TRUE) 
+        if( CheckWin((int*)matrix,_sum) == true) 
         {
             Congratulations();
             if( PlaAgain())
@@ -303,7 +326,7 @@ void Help(void)
 
 void Menu(int _sum)
 {
-    int key_pressed,position=0,exit=FALSE;
+    int key_pressed,position=0,exit=false;
 	
     while(!exit)
     {
