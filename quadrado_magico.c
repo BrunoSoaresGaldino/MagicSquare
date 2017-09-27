@@ -146,6 +146,7 @@ int Exit(void)
 
     }
     while(key_pressed != KEY_ENTER);
+
     puts("\r                                                                          ");
     
     if(!position)
@@ -203,13 +204,20 @@ void Input(int *matrix)
         }
 
         if(key_pressed == KEY_DOWN && y==2){y=0;j = 2;}
-            else if(key_pressed == KEY_UP && y == 0) {y = 2; j = 8;}
-                else if(key_pressed == KEY_LEFT && x == 0){x = 2;i = 12;}
-                    else if(key_pressed == KEY_RIGHT && x == 2){x = 0; i = 2;}
-                        else if(key_pressed == KEY_UP){y--;j -= 3;} 
-                            else if(key_pressed == KEY_DOWN){ y++; j += 3;} 
-                                else if(key_pressed == KEY_LEFT){ x--; i -= 5;} 
-                                    else if(key_pressed == KEY_RIGHT){x++; i += 5;}
+            
+        else if(key_pressed == KEY_UP && y == 0) {y = 2; j = 8;}
+        
+        else if(key_pressed == KEY_LEFT && x == 0){x = 2;i = 12;}
+        
+        else if(key_pressed == KEY_RIGHT && x == 2){x = 0; i = 2;}
+        
+        else if(key_pressed == KEY_UP){y--;j -= 3;} 
+        
+        else if(key_pressed == KEY_DOWN){ y++; j += 3;} 
+        
+        else if(key_pressed == KEY_LEFT){ x--; i -= 5;} 
+        
+        else if(key_pressed == KEY_RIGHT){x++; i += 5;}
         
         if(key_pressed == KEY_ESC)
         {
@@ -382,9 +390,12 @@ void Menu(int _sum)
             key_pressed = getch();
 		
             if(position == 0 && key_pressed == KEY_UP) position = 4;
-                else if(position == 4 && key_pressed == KEY_DOWN) position = 0;
-                    else if(key_pressed == KEY_UP) position--;
-                        else if(key_pressed == KEY_DOWN) position++;
+            
+            else if(position == 4 && key_pressed == KEY_DOWN) position = 0;
+            
+            else if(key_pressed == KEY_UP) position--;
+            
+            else if(key_pressed == KEY_DOWN) position++;
         }
         while(key_pressed != KEY_ENTER);
     
@@ -427,7 +438,7 @@ void Presentation(void)
     puts("                                   ___                            ___\n"         
     "                                  (   )                          (   )\n"        
     "  .--.     ___  ___    .---.    .-.| |   ___ .-.      .---.    .-.| |    .--.\n"   
-    " /    \\   (   )(   )  / .-, \\  /   \\ |  (   )   \\\     / .-,\\  /   \\ |   /    \\\n"
+    " /    \\   (   )(   )  / .-, \\  /   \\ |  (   )   \\    / .-, \\  /   \\ |   /    \\\n"
     "|  .-. '   | |  | |  (__) ; | |  .-. |   | ' .-. ;  (__) ; | |  .-. |  |  .-. ;\n"
     "| |  | |   | |  | |    .'`  | | |  | |   |  / (___)   .'`  | | |  | |  | |  | |\n"
     "| |  | |   | |  | |   / .'| | | |  | |   | |         / .'| | | |  | |  | |  | |\n"
@@ -437,11 +448,11 @@ void Presentation(void)
     " `._ / |    '.__.'   `.__.'_.  `.__,'   (___)       `.__.'_.  `.__,'    `.__.' \n"
     "    | |   \n"                                                                     
     "   (___) \n"                                                                      
-        );
         
-    puts("                                 .-.\n"
-    " ___ .-. .-.     .---.    .--.   ( __)   .--.      .--.\n"
-    "(   )   '   \\   / .-, \\  /    \\  ('')  /    \\    /    \\\n"  
+        
+    "                                 .-.\n"
+    " ___ .-. .-.    .---.     .--.   ( __)   .--.      .--.\n"
+    "(   )   '   \\  / .-, \\  /     \\  ('')  /     \\   /     \\\n"  
     "|  .-.  .-. ; (__) ; | ;  ,-. '  | |  |  .-. ;  |  .-. ;\n"
     "| |  | |  | |   .'`  | | |  | |  | |  |  |(___) | |  | |\n"
     "| |  | |  | |  / .'| | | |  | |  | |  |  |      | |  | |\n"
@@ -451,7 +462,7 @@ void Presentation(void)
     "(___)(___)(___)`.__.'_.  `.__. | (___)  `.__,'    `.__.'\n"
     "                        ( `-' ;\n"
     "                         `.__.\n"                       
-        );   
+    );   
      
     getchar();
 }
